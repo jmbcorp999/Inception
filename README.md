@@ -17,11 +17,30 @@ Le Dockerfile est utilisé pour automatiser le processus de construction d'une i
 Un Dockerfile ne sert qu'a deployer, normalement, qu'un seul et unique processus, application ou service.
 
 ### Le docker-compose
-Comme vu precedement, un container est destine a faire tourner une seule application ou un seul service, hors ilest souvent necessaire pour le bon deroulement d'un projet d'en disposer de plusieurs. C'est la que rentre en jeu le docker compose.
-Docker Compose est un outil destiné à définir et exécuter des applications Docker à plusieurs conteneurs. Dans Compose, vous utilisez un fichier YAML pour configurer les services de votre application. Ensuite, vous créez et vous démarrez tous les services à partir de votre configuration en utilisant une seule commande.
-YAML est un language de programmation regulierement utilise en scripting, il est tres proche du language humaim et son utilisation pour les Dockers est tres facile.
+Comme vu precedement, un container est destine a faire tourner une seule application ou un seul service, hors il est souvent necessaire pour le bon deroulement d'un projet d'en disposer de plusieurs. C'est la que rentre en jeu le docker compose.
+Docker Compose est un outil destiné à définir et exécuter des applications Docker à plusieurs conteneurs. Dans Compose, vous utilisez un fichier YAML pour configurer les services de votre application. Ensuite, vous créez et vous démarrez tous les services à partir de votre configuration en utilisant une seule commande. C'est un peu comme un Makefile qui appelerait plusieurs autres Makefile pour compiler les librairies necessaires au fonctionnement du programme.
+Pour info, YAML est un language de programmation regulierement utilise en scripting, il est tres proche du language humaim et son utilisation pour les Dockers est tres facile.
 
 ### Comment structurer notre projet
+Pour respecter les consignes du projet, mais egalement pour disposer d'un projet clair, il est souhaitable de structurer le projet de la sorte :
+.
+├── dossier1
+│   ├── fichier1-1.md
+│   └── sous-dossier1
+│       ├── fichier1-2.md
+│       └── fichier1-3.md
+├── dossier2
+│   ├── fichier2-1.md
+│   └── sous-dossier2
+│       ├── fichier2-2.md
+│       └── fichier2-3.md
+└── dossier3
+    ├── fichier3-1.md
+    ├── fichier3-2.md
+    └── sous-dossier3
+        ├── fichier3-3.md
+        └── fichier3-4.md
+
 
 
 
