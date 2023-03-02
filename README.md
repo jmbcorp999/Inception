@@ -103,6 +103,9 @@ COPY	conf/nginx.conf DOSSIER_DE_DESTINATION/default.conf
 
 ENTRYPOINT	["COMMANDE_A_EXECUTER"]
 ```
+1. FROM
+2. RUN
+3. 
 
 ### Le docker-compose
 Comme vu precedement, un container est destine a faire tourner une seule application ou un seul service, hors il est souvent necessaire pour le bon deroulement d'un projet d'en disposer de plusieurs. C'est la que rentre en jeu le docker compose.
