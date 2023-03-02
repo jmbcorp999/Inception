@@ -78,9 +78,9 @@ Pour respecter les consignes du projet, mais egalement pour disposer d'un projet
 ```
 Bien entendu, libre a vous de nommer les fichiers de configuration et les tools comme bon vous semble.
 
-<br><br><br>
+<br><br>
 ---
-<br><br><br>
+<br><br>
 
 ## <a name="description"></a>II - Description du contenu du projet
 
@@ -284,9 +284,9 @@ volumes:
   - "~/data/mariadb/configuration.conf:/etc/mariadb/defaut.conf"
 ```
 
-<br><br><br>    
+<br><br>  
 ---
-<br><br><br>
+<br><br>
 
 ## <a name="strategie"></a>III - Strategie et conseil d'approche
 
