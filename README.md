@@ -89,6 +89,21 @@ Un Dockerfile est un fichier texte qui contient les instructions nécessaires po
 Le Dockerfile est utilisé pour automatiser le processus de construction d'une image Docker. Il spécifie les dépendances de l'application, les étapes d'installation, la configuration de l'environnement et les commandes pour exécuter l'application.
 Un Dockerfile ne sert a deployer, normalement, qu'un seul et unique processus, application ou service.
 
+Voici un exemple, assez complet mais volontairement simplifie, de ce a quoi devrait ressembler votre fichier `Dockerfile` pour le service Nginx :
+```
+FROM	NOM_DISTRIBUTION
+
+RUN	apt update; apt install -y NOM_DES_PAQUETS_A_INSTALLER
+
+RUN	mkdir -p NOM_DOSSIER_A_CREER; 
+
+RUN	COMMANDE_POUR_LA_CREATION_DES_CERTIFICATS_SSL
+
+COPY	conf/nginx.conf DOSSIER_DE_DESTINATION/default.conf
+
+ENTRYPOINT	["COMMANDE_A_EXECUTER"]
+```
+
 ### Le docker-compose
 Comme vu precedement, un container est destine a faire tourner une seule application ou un seul service, hors il est souvent necessaire pour le bon deroulement d'un projet d'en disposer de plusieurs. C'est la que rentre en jeu le docker compose.
 Docker Compose est un outil destiné à définir et exécuter des applications Docker à plusieurs conteneurs. Dans Compose, vous utilisez un fichier YAML pour configurer les services de votre application. Ensuite, vous créez et vous démarrez tous les services à partir de votre configuration en utilisant une seule commande. C'est un peu comme un Makefile qui appelerait plusieurs autres Makefile pour compiler les librairies necessaires au fonctionnement du programme.
@@ -99,7 +114,7 @@ Ce que vous allez integrer dans votre docker-compose :
 2. Les volumes, pour la persistance des donnees (prise en compte des modifications sur les fichiers du site, et des donnees presentes dans la database, entre autres).
 3. Les services, Nginx, MariaDB, Wordpress (incluant le service PHP) pour la partie obligatoire. Le serveur FTP, Redis et un service de votre choix pour les bonus.
 
-Voici un exemple, assez complet mais volontairement simplifie, de ce a quoi devrait ressembler votre fichier `docker-compose.yml` :
+
 ```
 networks:
   inception:
