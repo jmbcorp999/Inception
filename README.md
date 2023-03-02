@@ -1,6 +1,6 @@
 # Inception
 
-Ce document a pour but de vous aider a comprendre le principe des Dockers, mieux apprehender le projet et peut etre vous assurer un depart plus simple en vous donnant quelques conseils et astuces qui m'ont aider a le realiser.
+Ce document a pour but de vous aider a comprendre le principe des Dockers, mieux apprehender le projet et peut etre vous assurer un depart plus simple en vous donnant quelques conseils et astuces qui m'ont aider a le realiser. N'y cherchez pas de solution toute faite, ni de code tout pret a copier-coller, ce n'est absolument pas l'objectif de ce document.
 
 [I - Notions generales](#notions)
 
@@ -27,7 +27,10 @@ Ce document a pour but de vous aider a comprendre le principe des Dockers, mieux
 [&emsp;&emsp;Les scripts](#script)
 
 [&emsp;III - Strategie et conseil d'approche](#strategie)
-    
+
+<br><br><br>    
+---
+<br><br><br>
 
 ## <a name="notions"></a>I - Notions generales
 
@@ -75,7 +78,9 @@ Pour respecter les consignes du projet, mais egalement pour disposer d'un projet
 ```
 Bien entendu, libre a vous de nommer les fichiers de configuration et les tools comme bon vous semble.
 
+<br><br><br>
 ---
+<br><br><br>
 
 ## <a name="description"></a>II - Description du contenu du projet
 
@@ -235,7 +240,6 @@ secret.txt
 .DS_Store
 ```
 
-
 ### <a name="env"></a>Le fichier .env (gestion de l'environnement)
 Le fichier .env est utilisé pour stocker des variables d'environnement qui seront utilisées lors de la création et du lancement de conteneurs Docker. Il permet de définir des valeurs de variables d'environnement pour des images Docker spécifiques sans avoir à les définir explicitement dans le fichier docker-compose.yml ou lors de la commande docker run. Cela presente un grand interet lorsque l'on veux par exemple transmettre les futurs mots de passe de nos services.
 Il faudra pour cela s'assurer de bien faire figurer la ligne ``env_file: .env`` dans votre docker-compose, pour chaque service ayant besoin de recuperer ces variables.
@@ -280,7 +284,9 @@ volumes:
   - "~/data/mariadb/configuration.conf:/etc/mariadb/defaut.conf"
 ```
 
+<br><br><br>    
 ---
+<br><br><br>
 
 ## <a name="strategie"></a>III - Strategie et conseil d'approche
 
