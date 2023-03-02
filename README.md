@@ -87,7 +87,7 @@ Et la, comme par magie, lorsque vous faites ``make help``, cela donne :
 ### Le fichier Dockerfile
 Un Dockerfile est un fichier texte qui contient les instructions nécessaires pour construire une image Docker. C'est en quelque sorte le Makefile d'un container.
 Le Dockerfile est utilisé pour automatiser le processus de construction d'une image Docker. Il spécifie les dépendances de l'application, les étapes d'installation, la configuration de l'environnement et les commandes pour exécuter l'application.
-Un Dockerfile ne sert a deployer, normalement, qu'un seul et unique processus, application ou service.
+**Un Dockerfile ne sert a deployer, normalement, qu'un seul et unique processus, application ou service.**
 
 Voici un exemple, assez complet mais volontairement simplifie, de ce a quoi devrait ressembler votre fichier `Dockerfile` pour le service Nginx :
 ```
@@ -103,9 +103,30 @@ COPY	conf/nginx.conf DOSSIER_DE_DESTINATION/default.conf
 
 ENTRYPOINT	["COMMANDE_A_EXECUTER"]
 ```
-1. FROM
-2. RUN
-3. 
+
+Les principales instructions :
+
+**1. FROM**
+
+L'instruction FROM est utilisée pour spécifier l'image de base à partir de laquelle le conteneur sera construit. Elle doit être la première instruction dans le fichier Dockerfile, et spécifie l'image à utiliser. Pour le projet ca sera donc debian:buster ou alpine:3.17 (au 02/03/2023, car il faut utiliser l'avant derniere version stable pour Alpine, et la derniere est actuellement la version 3.17.2)
+
+**2. RUN**
+
+L'instruction RUN est utilisée pour exécuter des commandes dans le conteneur lors de sa construction. Les commandes sont exécutées dans un shell à l'intérieur du conteneur. Par exemple, "RUN apt-get update && apt-get install -y nginx" installe le serveur web nginx dans le conteneur. Il est possible d'executer plusieurs commandes d'affile, en utilisant `&&` ou `;`.
+Astuce: pensez a utiliser les arguments de validation automatique des choix, tel que `-y` pour apt ou apt-get sur une base Debian.
+
+**3. COPY**
+
+L'instruction COPY est utilisée pour copier des fichiers depuis l'hôte vers le conteneur. Elle peut être utilisée pour ajouter des fichiers tels que des scripts ou des configurations dans le conteneur. Vous en aurez besoin pour copier les fichiers de configuration et les scripts shell a l'interieur de votre Docker, chaque fois que cela est necessaire.
+
+**4. ENTRYPOINT**
+
+L'instruction `ENTRYPOINT` est utilisée pour spécifier la commande à exécuter lorsque le conteneur est lancé. Elle définit la commande qui sera exécutée par défaut lors de l'exécution du conteneur. Utile, voir essentiel, pour lancer le service contenu dans le Docker. **En effet, si aucun service ou aucune application n'est executee au sein de votre Docker, ce dernier se fermera automatiquement, une fois la liste des instructions terminees !**. La formulation est un peu speciale, si vous avez besoin d'executer votre commande avec des arguments. Pour etre certain que la commande soit transmises correctement, il faudra placer l'ensemble entre `[]`, placer chaque partie entre `"` et mettre des virgules en guise de separateur, par exemple, pour Nginx : `ENTRYPOINT	["nginx", "-g", "daemon off;"]`. L'instruction `ENTRYPOINT` est normalement place a la toute fin du Dockerfile.
+
+**5. CMD**
+
+Instruction assez similaire a `ENTRYPOINT`. En l'absence de `ENTRYPOINT`, joue le meme role. Par contre, si l'instruction `CMD` est passee apres `ENTRYPOINT`, elle permet de passer des arguments a `ENTRYPOINT`. Il est a noter que si le Docker est lance aves des arguments, ces derniers ecraseront les arguments fournis par `CMD`.
+
 
 ### Le docker-compose
 Comme vu precedement, un container est destine a faire tourner une seule application ou un seul service, hors il est souvent necessaire pour le bon deroulement d'un projet d'en disposer de plusieurs. C'est la que rentre en jeu le docker compose.
