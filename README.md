@@ -1,8 +1,37 @@
 # Inception
 
-## I - Notions generales
+Ce document a pour but de vous aider a comprendre le principe des Dockers, mieux apprehender le projet et peut etre vous assurer un depart plus simple en vous donnant quelques conseils et astuces qui m'ont aider a le realiser.
 
-### C'est quoi Docker ?
+[I - Notions generales](#notions)
+
+[&emsp;C'est quoi Docker ?](#definition)
+
+[&emsp;Comment structurer notre projet ?](#struct)
+
+[II - Description du contenu du projet](#description)
+
+[&emsp;Makefile](#makefile)
+
+[&emsp;Le fichier Dockerfile](#dockerfile)
+
+[&emsp;Le docker-compose](#dockercompose)
+
+[&emsp;Le fichier .dockerignore](#dockerignore)
+
+[&emsp;Le fichier .env](#env)
+
+[&emsp;Les fichiers de configuration / Les scripts](#config)
+
+[&emsp;&emsp;Les fichiers de configuration](#conf)
+
+[&emsp;&emsp;Les scripts](#script)
+
+[&emsp;III - Strategie et conseil d'approche](#strategie)
+    
+
+## <a name="notions"></a>I - Notions generales
+
+### <a name="definition"></a>C'est quoi Docker ?
 Docker est une plate-forme logicielle qui vous permet de concevoir, tester et déployer des applications rapidement. Docker intègre les logiciels dans des unités normalisées appelées conteneurs, qui rassemblent tous les éléments nécessaires à leur fonctionnement, dont les bibliothèques, les outils système, le code et l'environnement d'exécution. Avec Docker, vous pouvez facilement déployer et dimensionner des applications dans n'importe quel environnement, avec l'assurance que votre code s'exécutera correctement.
 Le fonctionnement de Docker repose sur le noyau Linux et les fonctions de ce noyau, comme les groupes de contrôle cgroups et les espaces de nom. Ce sont ces fonctions qui permettent de séparer les processus pour qu’ils puissent s’exécuter de façon indépendante.
 En effet, le but des conteneurs est d’exécuter plusieurs processus et applications **séparément**. C’est ce qui permet d’optimiser l’utilisation de l’infrastructure sans pour autant atténuer le niveau de sécurité par rapport aux systèmes distincts.
@@ -12,7 +41,7 @@ Avantages et inconvenients de Docker, par rapport a une machine virtuelle classi
 - Avantages : deploiement rapide, facile, et compatible avec la majorite des plateformes (Windows, OSX, Linux).
 - Inconvenients : ne s'adapte pas a tous les types de projets, impossible de creer un environnement base sur un noyau autre que Linux.
 
-### Comment structurer notre projet
+### <a name="struct"></a>Comment structurer notre projet
 Pour respecter les consignes du projet, mais egalement pour disposer d'un projet clair, il est souhaitable de structurer le projet de la sorte.
 ```
 .
@@ -46,10 +75,11 @@ Pour respecter les consignes du projet, mais egalement pour disposer d'un projet
 ```
 Bien entendu, libre a vous de nommer les fichiers de configuration et les tools comme bon vous semble.
 
-----------------------------
-## II - Description du contenu du projet
+---
 
-### Makefile
+## <a name="description"></a>II - Description du contenu du projet
+
+### <a name="makefile"></a>Makefile
 Il est souhaitable de creer pas mal de commandes au sein de votre Makefile, dans l'objectif de pouvoir interagir de maniere assez complete avec votre projet. Il n'est pas obligatoire de recreer toutes ces commandes, mais c'est ce que j'ai fait. Exemple de commandes :
 
 1. build -> construit les images Docker pour les conteneurs.
@@ -86,7 +116,7 @@ Et la, comme par magie, lorsque vous faites ``make help``, cela donne :
   volumes          Prepare folders needed
  ```
 
-### Le fichier Dockerfile
+### <a name="dockerfile"></a>Le fichier Dockerfile
 Un Dockerfile est un fichier texte qui contient les instructions nécessaires pour construire une image Docker. C'est en quelque sorte le Makefile d'un container.
 Le Dockerfile est utilisé pour automatiser le processus de construction d'une image Docker. Il spécifie les dépendances de l'application, les étapes d'installation, la configuration de l'environnement et les commandes pour exécuter l'application.
 **Un Dockerfile ne sert a deployer, normalement, qu'un seul et unique processus, application ou service.**
@@ -134,7 +164,7 @@ Instruction assez similaire a `ENTRYPOINT`. En l'absence de `ENTRYPOINT`, joue l
 Permet d'ouvrir les ports specifies du containeur. Cette instruction est facultative si les ports ont ete specifies dans le docker-compose.
 
 
-### Le docker-compose
+### <a name="dockercompose"></a>Le docker-compose
 Comme vu precedement, un container est destine a faire tourner une seule application ou un seul service, hors il est souvent necessaire pour le bon deroulement d'un projet d'en disposer de plusieurs. C'est la que rentre en jeu le docker compose.
 Docker Compose est un outil destiné à définir et exécuter des applications Docker à plusieurs conteneurs. Dans Compose, vous utilisez un fichier YAML pour configurer les services de votre application. Ensuite, vous créez et vous démarrez tous les services à partir de votre configuration en utilisant une seule commande. C'est un peu comme un Makefile qui appelerait plusieurs autres Makefile pour compiler les librairies necessaires au fonctionnement du programme.
 Pour info, YAML est un language de programmation regulierement utilise en scripting, il est tres proche du language humaim et son utilisation pour les Dockers est tres facile.
@@ -194,7 +224,7 @@ services:
 ```
 **Attention, l'utilisation du language YAML requiert une identation parfaite pour fonctionner !**
 
-### Le fichier .dockerignore
+### <a name="dockerignore"></a>Le fichier .dockerignore
 Le fichier .dockerignore est utilisé pour exclure des fichiers et des répertoires spécifiques de l'image Docker qui est construite à partir d'un répertoire source. Cela permet de réduire la taille de l'image et d'éviter d'inclure des fichiers inutiles ou sensibles. Il fonctionne exactement comme un fichier .gitignore.
 
 Exemple de fichier .dockerignore :
@@ -206,8 +236,9 @@ secret.txt
 ```
 
 
-### Le fichier .env (gestion de l'environnement)
+### <a name="env"></a>Le fichier .env (gestion de l'environnement)
 Le fichier .env est utilisé pour stocker des variables d'environnement qui seront utilisées lors de la création et du lancement de conteneurs Docker. Il permet de définir des valeurs de variables d'environnement pour des images Docker spécifiques sans avoir à les définir explicitement dans le fichier docker-compose.yml ou lors de la commande docker run. Cela presente un grand interet lorsque l'on veux par exemple transmettre les futurs mots de passe de nos services.
+Il faudra pour cela s'assurer de bien faire figurer la ligne ``env_file: .env`` dans votre docker-compose, pour chaque service ayant besoin de recuperer ces variables.
 
 Exemple de fichier .env :
 ```
@@ -221,11 +252,11 @@ WP_DB_USER=XXXXXX
 WP_DB_PASSWORD=123456
 ```
 
-## Les fichiers de configuration / Les scripts
+### <a name="config"></a>Les fichiers de configuration / Les scripts
 
 Ces deux approchent, liees a la configuration des Dockers, sont complementaires. Dans certains cas, il est possible de se passer de fichiers de configuration et de script, pour d'autres cas, l'un, l'autre voir les deux seront necessaires, a vous de juger.
 
-**1. Les fichiers de configuration**
+**<a name="conf"></a>1. Les fichiers de configuration**
 
 Certains services necessitent de modifier les fichiers de configuration, deux possibilites s'offrent alors a nous.
 
@@ -237,7 +268,7 @@ b. Recuperer le fichier en amont, le modifier, et le copier au bon endroit au de
 
 Un choix plus raisonnable, lorsqu'il s'agit de supprimer, ajouter ou modifier de nombreuses lignes de configuration pour notre service. Cela va etre le cas pour le service Nginx, et pour la partie PHP du service Wordpress. Il suffira d'utiliser l'instruction `COPY` pour integrer ce fichier au Docker.
 
-**2. Les scripts**
+**<a name="script"></a>2. Les scripts**
 
 Tres utiles, voir indispensables pour le deploiement de certains services. Ils permettent d'eviter la creation de trop nombreuses images Docker intermediaires, a chaque usage notamment des instructions RUN. Leur utilisation est egalement recommande pour debuguer nos Dockers. Un peu a la maniere d'un `printf` en C, l'utilisation de commande `echo` a l'interieur de ces scripts permets de mieux localiser les problemes, de connaitre le stade de deploiement de notre Docker, et de verifier le passage dans certaines boucles conditionnelles.
 
@@ -246,9 +277,12 @@ Il faut faire attention cependant au systeme sur lequel ils seront executes. En 
 Dans tous les cas, il s'agit simplement de scripts shell qui devront etre copies grace a l'instruction `COPY`, puis executes avec l'instruction `RUN`. Il existe une autre solution, qui consiste a creer un volume dans le docker-compose, voici un exemple (totalement fictif) :    
 ```
 volumes:
-  - "~data/mariadb/configuration.conf:/etc/mariadb/defaut.conf"
+  - "~/data/mariadb/configuration.conf:/etc/mariadb/defaut.conf"
 ```
-----------------------------
+
+---
+
+## <a name="strategie"></a>III - Strategie et conseil d'approche
 
 Nginx
 
