@@ -48,60 +48,41 @@ Bien entendu, libre a vous de nommer les fichiers de configuration et les tools 
 ### Description du contenu du projet
 
 #### Makefile
-Il est souhaitable de creer pas mal de commande au sein de votre Makefile, dans l'objectif de pouvoir interagir de maniere assez concrete avec votre projet. Exemple de commandes :
+Il est souhaitable de creer pas mal de commandes au sein de votre Makefile, dans l'objectif de pouvoir interagir de maniere assez complete avec votre projet. Il n'est pas obligatoire de recreer toutes ces commandes, mais c'est ce que j'ai fait. Exemple de commandes :
 
-1. up 
-2. build
-3. start
-4. down
-5. reload
-6. status
-7. logs
-8. clean
-9. cleanv
-10. prune
-11. fclean
-12. volume
+1. build -> construit les images Docker pour les conteneurs.
+2. up -> lance le projet (prevoir ou non l'argument -d pour lancer en arriere plan).
+3. start -> demarre le projet deja "build".
+5. down -> arrete et supprime les dockers.
+6. reload -> reconstruit les images dockers et lance le projet.
+7. status -> affiche les informations sur les conteneurs en cours d'exécution.
+8. logs -> affiche les journaux des conteneurs.
+9. clean -> arrête et supprime les conteneurs Docker et supprime tous les fichiers Docker sans étiquette.
+10. cleanvol -> supprime les données persistantes dans les dossiers spécifiés (volumes).
+11. prune -> supprime tous les conteneurs et images Docker non utilises presents sur le systeme.
+12. fclean -> combine les commandes down, prune et cleanv.
+13. volume -> crée les dossiers nécessaires pour stocker les données persistantes des conteneurs.
 
-up: intro volumes ## Launch Inception in background
-	@ docker-compose -f ./srcs/docker-compose.yml up -d
-
-build: intro volumes ## Build Inception (use make start after, to launch)
-	@ docker-compose -f ./srcs/docker-compose.yml build
-
-start: ## Begin Inception
-	@ docker-compose -f srcs/docker-compose.yml start
-
-down: ## Stop Inception
-	@ docker-compose -f srcs/docker-compose.yml down
-
-reload: volumes ## Restart Inception
-	@ docker-compose -f srcs/docker-compose.yml up --build
-
-status: ## Display Inception status
-	@ docker ps
-
-logs: ## See Inception logs
-	@ docker-compose -f ./srcs/docker-compose.yml logs
-
-clean: down ## Stop Inception & Clean inception docker (prune -f)
-	@ docker system prune -f
-
-cleanv: ## Remove persistant datas
-	@ sudo rm -rf ~/data
-
-prune: down ## Remove all dockers on this system (prune -a)
-	@ docker system prune -a
-
-fclean: down prune cleanv ## Remove all dockers on this system & Remove persistant datas
-	@ echo
-
-volumes: ## Prepare folders needed
-	@ mkdir -p ~/data/website/wordpress
-	@ mkdir -p ~/data/database
-	@ mkdir -p ~/data/portainer
-
-
+Astuce :
+Creez une commande "help" contenant cette commande :
+``@ awk 'BEGIN {FS = ":.*##";} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)``
+Rajoutez des commentaires sur chacune de vos commandes comme cela :
+``up: ## Launch Inception in background``
+Et la, comme par magie, lorsque vous faites ``make help``, cela donne :
+```
+  up               Launch Inception in background
+  build            Build Inception (use make start after, to launch)
+  start            Begin Inception
+  down             Stop Inception
+  reload           Restart Inception
+  status           Display Inception status
+  logs             See Inception logs
+  clean            Stop Inception & Clean inception docker (prune -f)
+  cleanv           Remove persistant datas
+  prune            Remove all dockers on this system (prune -a)
+  fclean           Remove all dockers on this system & Remove persistant datas
+  volumes          Prepare folders needed
+ ```
 
 #### Le fichier Dockerfile
 Un Dockerfile est un fichier texte qui contient les instructions nécessaires pour construire une image Docker. C'est en quelque sorte le Makefile d'un container.
