@@ -20,11 +20,9 @@ Ce document a pour but de vous aider a comprendre le principe des Dockers, mieux
 
 [&emsp;Le fichier .env](#env)
 
-[&emsp;Les fichiers de configuration / Les scripts](#config)
+[&emsp;Les fichiers de configuration](#conf)
 
-[&emsp;&emsp;Les fichiers de configuration](#conf)
-
-[&emsp;&emsp;Les scripts](#script)
+[&emsp;Les scripts](#script)
 
 [&emsp;III - Strategie et conseil d'approche](#strategie)
 
