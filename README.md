@@ -11,37 +11,107 @@ Avantages et inconvenients de Docker, par rapport a une machine virtuelle classi
 - Avantages : deploiement rapide, facile, et compatible avec la majorite des plateformes (Windows, OSX, Linux).
 - Inconvenients : ne s'adapte pas a tous les types de projets.
 
-### Le fichier Dockerfile
+### Comment structurer notre projet
+Pour respecter les consignes du projet, mais egalement pour disposer d'un projet clair, il est souhaitable de structurer le projet de la sorte.
+```
+.
+├── Makefile
+├── .gitignore
+└── srcs
+    ├── docker-compose.yml
+    ├── .env
+    └── requirements
+        ├── mariadb
+        │   ├── Dockerfile
+        │   ├── .dockerignore
+        │   ├── conf
+        │   │   └── configuration.conf
+        │   └── tools
+        │       └── configure.sh
+        ├── nginx
+        │   ├── Dockerfile
+        │   ├── .dockerignore
+        │   ├── conf
+        │   │   └── configuration.conf
+        │   └── tools
+        │       └── configure.sh
+        └── wordpress
+            ├── Dockerfile
+            ├── .dockerignore
+            ├── conf
+            │   └── configuration.conf
+            └── tools
+                └── configure.sh
+```
+Bien entendu, libre a vous de nommer les fichiers de configuration et les tools comme bon vous semble.
+
+### Description du contenu du projet
+
+#### Makefile
+Il est souhaitable de creer pas mal de commande au sein de votre Makefile, dans l'objectif de pouvoir interagir de maniere assez concrete avec votre projet. Exemple de commandes :
+
+1. up 
+2. build
+3. start
+4. down
+5. reload
+6. status
+7. logs
+8. clean
+9. cleanv
+10. prune
+11. fclean
+12. volume
+
+up: intro volumes ## Launch Inception in background
+	@ docker-compose -f ./srcs/docker-compose.yml up -d
+
+build: intro volumes ## Build Inception (use make start after, to launch)
+	@ docker-compose -f ./srcs/docker-compose.yml build
+
+start: ## Begin Inception
+	@ docker-compose -f srcs/docker-compose.yml start
+
+down: ## Stop Inception
+	@ docker-compose -f srcs/docker-compose.yml down
+
+reload: volumes ## Restart Inception
+	@ docker-compose -f srcs/docker-compose.yml up --build
+
+status: ## Display Inception status
+	@ docker ps
+
+logs: ## See Inception logs
+	@ docker-compose -f ./srcs/docker-compose.yml logs
+
+clean: down ## Stop Inception & Clean inception docker (prune -f)
+	@ docker system prune -f
+
+cleanv: ## Remove persistant datas
+	@ sudo rm -rf ~/data
+
+prune: down ## Remove all dockers on this system (prune -a)
+	@ docker system prune -a
+
+fclean: down prune cleanv ## Remove all dockers on this system & Remove persistant datas
+	@ echo
+
+volumes: ## Prepare folders needed
+	@ mkdir -p ~/data/website/wordpress
+	@ mkdir -p ~/data/database
+	@ mkdir -p ~/data/portainer
+
+
+
+#### Le fichier Dockerfile
 Un Dockerfile est un fichier texte qui contient les instructions nécessaires pour construire une image Docker. C'est en quelque sorte le Makefile d'un container.
 Le Dockerfile est utilisé pour automatiser le processus de construction d'une image Docker. Il spécifie les dépendances de l'application, les étapes d'installation, la configuration de l'environnement et les commandes pour exécuter l'application.
 Un Dockerfile ne sert qu'a deployer, normalement, qu'un seul et unique processus, application ou service.
 
-### Le docker-compose
+#### Le docker-compose
 Comme vu precedement, un container est destine a faire tourner une seule application ou un seul service, hors il est souvent necessaire pour le bon deroulement d'un projet d'en disposer de plusieurs. C'est la que rentre en jeu le docker compose.
 Docker Compose est un outil destiné à définir et exécuter des applications Docker à plusieurs conteneurs. Dans Compose, vous utilisez un fichier YAML pour configurer les services de votre application. Ensuite, vous créez et vous démarrez tous les services à partir de votre configuration en utilisant une seule commande. C'est un peu comme un Makefile qui appelerait plusieurs autres Makefile pour compiler les librairies necessaires au fonctionnement du programme.
 Pour info, YAML est un language de programmation regulierement utilise en scripting, il est tres proche du language humaim et son utilisation pour les Dockers est tres facile.
-
-### Comment structurer notre projet
-Pour respecter les consignes du projet, mais egalement pour disposer d'un projet clair, il est souhaitable de structurer le projet de la sorte :
-.
-├── dossier1
-│   ├── fichier1-1.md
-│   └── sous-dossier1
-│       ├── fichier1-2.md
-│       └── fichier1-3.md
-├── dossier2
-│   ├── fichier2-1.md
-│   └── sous-dossier2
-│       ├── fichier2-2.md
-│       └── fichier2-3.md
-└── dossier3
-    ├── fichier3-1.md
-    ├── fichier3-2.md
-    └── sous-dossier3
-        ├── fichier3-3.md
-        └── fichier3-4.md
-
-
 
 
 - Les commandes disponibles
