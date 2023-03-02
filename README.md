@@ -204,8 +204,9 @@ secret.txt
 .DS_Store
 ```
 
+
 ### Le fichier .env (gestion de l'environnement)
-Le fichier .env est utilisé pour stocker des variables d'environnement qui seront utilisées lors de la création et du lancement de conteneurs Docker. Il permet de définir des valeurs de variables d'environnement pour des images Docker spécifiques sans avoir à les définir explicitement dans le fichier docker-compose.yml ou lors de la commande docker run.
+Le fichier .env est utilisé pour stocker des variables d'environnement qui seront utilisées lors de la création et du lancement de conteneurs Docker. Il permet de définir des valeurs de variables d'environnement pour des images Docker spécifiques sans avoir à les définir explicitement dans le fichier docker-compose.yml ou lors de la commande docker run. Cela presente un grand interet lorsque l'on veux par exemple transmettre les futurs mots de passe de nos services.
 
 Exemple de fichier .env :
 ```
@@ -220,6 +221,30 @@ WP_DB_PASSWORD=123456
 ```
 
 ----------------------------
+
+## Les fichiers de configuration / Les scripts
+
+Ces deux approchent, liees a la configuration des Dockers, sont complementaires. Dans certains cas, il est possible de se passer de fichiers de configuration et de script, pour d'autres cas, l'un, l'autre voir les deux seront necessaires, a vous de juger.
+
+**1. Les fichiers de configuration**
+
+Certains services necessitent de modifier les fichiers de configuration, deux possibilites s'offrent alors a nous.
+
+a. Modifier le fichier par le biais d'un script
+
+On peut pour cela utiliser tous les outils classiques d'un shell, tels que `AWK`, `SED`,... Et toutes les astuces apprisent lors des series Shell de la piscine, ou mieux, celles acquises lors de la conception du Minishell. Cette solution peut etre choisie s'il y a tres peu de lignes a modifier.
+
+b. Recuperer le fichier en amont, le modifier, et le copier au bon endroit au deploiement.
+
+Un choix plus raisonnable, lorsqu'il s'agit de supprimer, ajouter ou modifier de nombreuses lignes de configuration pour notre service. Cela va etre le cas pour le service Nginx, et pour la partie PHP du service Wordpress.
+
+**2. Les scripts**
+
+Tres utiles, voir indispensables pour le deploiement de certains services. Ils permettent d'eviter la creation de trop nombreuses images Docker intermediaires, a chaque usage notamment des instructions RUN. Leur utilisation est egalement recommande pour debuguer nos Dockers. Un peu a la maniere d'un `printf` en C, l'utilisation de commande `echo` a l'interieur de ces scripts permets de mieux localiser les problemes, de connaitre le stade de deploiement de notre Docker, et de verifier le passage dans certaines boucles conditionnelles.
+
+Il faut faire attention cependant au systeme sur lequel ils seront executes. En effet, certaines commandes different entre `debian:buster` et `alpine` c'est pourquoi le portage de ces scripts d'un systeme a l'autre demandera des adaptions. Dans tous les cas, il s'agit simplement de scripts shell.
+
+
 Nginx
 
 MariaDB
