@@ -7,9 +7,10 @@ Docker est une plate-forme logicielle qui vous permet de concevoir, tester et d�
 Le fonctionnement de Docker repose sur le noyau Linux et les fonctions de ce noyau, comme les groupes de contrôle cgroups et les espaces de nom. Ce sont ces fonctions qui permettent de séparer les processus pour qu’ils puissent s’exécuter de façon indépendante.
 En effet, le but des conteneurs est d’exécuter plusieurs processus et applications **séparément**. C’est ce qui permet d’optimiser l’utilisation de l’infrastructure sans pour autant atténuer le niveau de sécurité par rapport aux systèmes distincts.
 **La principale difference avec une machine virtuelle "traditionnelle" (VMWare, VirtualBox...) repose sur le fait que chaque container est dedie a l'execution d'un seul et unique processus**, une seule application, a l'interieur d'un environnement virtuel base sur un noyau Linux. Une machine virtuelle "traditionnelle", elle, execute un systeme d'exploitation complet, et est en mesure de de faire tourner plusieurs services ou applications simultanement.
+
 Avantages et inconvenients de Docker, par rapport a une machine virtuelle classique :
 - Avantages : deploiement rapide, facile, et compatible avec la majorite des plateformes (Windows, OSX, Linux).
-- Inconvenients : ne s'adapte pas a tous les types de projets.
+- Inconvenients : ne s'adapte pas a tous les types de projets, impossible de creer un environnement base sur un noyau autre que Linux.
 
 ### Comment structurer notre projet
 Pour respecter les consignes du projet, mais egalement pour disposer d'un projet clair, il est souhaitable de structurer le projet de la sorte.
@@ -236,14 +237,20 @@ On peut pour cela utiliser tous les outils classiques d'un shell, tels que `AWK`
 
 b. Recuperer le fichier en amont, le modifier, et le copier au bon endroit au deploiement.
 
-Un choix plus raisonnable, lorsqu'il s'agit de supprimer, ajouter ou modifier de nombreuses lignes de configuration pour notre service. Cela va etre le cas pour le service Nginx, et pour la partie PHP du service Wordpress.
+Un choix plus raisonnable, lorsqu'il s'agit de supprimer, ajouter ou modifier de nombreuses lignes de configuration pour notre service. Cela va etre le cas pour le service Nginx, et pour la partie PHP du service Wordpress. Il suffira d'utiliser l'instruction `COPY` pour integrer ce fichier au Docker.
 
 **2. Les scripts**
 
 Tres utiles, voir indispensables pour le deploiement de certains services. Ils permettent d'eviter la creation de trop nombreuses images Docker intermediaires, a chaque usage notamment des instructions RUN. Leur utilisation est egalement recommande pour debuguer nos Dockers. Un peu a la maniere d'un `printf` en C, l'utilisation de commande `echo` a l'interieur de ces scripts permets de mieux localiser les problemes, de connaitre le stade de deploiement de notre Docker, et de verifier le passage dans certaines boucles conditionnelles.
 
-Il faut faire attention cependant au systeme sur lequel ils seront executes. En effet, certaines commandes different entre `debian:buster` et `alpine` c'est pourquoi le portage de ces scripts d'un systeme a l'autre demandera des adaptions. Dans tous les cas, il s'agit simplement de scripts shell.
+Il faut faire attention cependant au systeme sur lequel ils seront executes. En effet, certaines commandes different entre `debian:buster` et `alpine` c'est pourquoi le portage de ces scripts d'un systeme a l'autre demandera des adaptions. 
 
+Dans tous les cas, il s'agit simplement de scripts shell qui devront etre copies grace a l'instruction `COPY`, puis executes avec l'instruction `RUN`. Il existe une autre solution, qui consiste a creer un volume dans le docker-compose, voici un exemple (totalement fictif) :    
+```
+volumes:
+  - "~data/mariadb/configuration.conf:/etc/mariadb/defaut.conf"
+```
+----------------------------
 
 Nginx
 
