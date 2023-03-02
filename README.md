@@ -45,6 +45,7 @@ Pour respecter les consignes du projet, mais egalement pour disposer d'un projet
 ```
 Bien entendu, libre a vous de nommer les fichiers de configuration et les tools comme bon vous semble.
 
+----------------------------
 ## II - Description du contenu du projet
 
 ### Makefile
@@ -112,12 +113,12 @@ L'instruction FROM est utilisée pour spécifier l'image de base à partir de la
 
 **2. RUN**
 
-L'instruction RUN est utilisée pour exécuter des commandes dans le conteneur lors de sa construction. Les commandes sont exécutées dans un shell à l'intérieur du conteneur. Par exemple, "RUN apt-get update && apt-get install -y nginx" installe le serveur web nginx dans le conteneur. Il est possible d'executer plusieurs commandes d'affile, en utilisant `&&` ou `;`.
+L'instruction RUN est utilisée pour exécuter des commandes dans le conteneur lors de sa construction. Les commandes sont exécutées dans un shell à l'intérieur du conteneur. Par exemple, ``RUN apt-get update && apt-get install -y nginx`` installe le serveur web nginx dans le conteneur. Il est possible d'executer plusieurs commandes d'affile, en utilisant `&&` ou `;`.
 Astuce: pensez a utiliser les arguments de validation automatique des choix, tel que `-y` pour apt ou apt-get sur une base Debian.
 
 **3. COPY**
 
-L'instruction COPY est utilisée pour copier des fichiers depuis l'hôte vers le conteneur. Elle peut être utilisée pour ajouter des fichiers tels que des scripts ou des configurations dans le conteneur. Vous en aurez besoin pour copier les fichiers de configuration et les scripts shell a l'interieur de votre Docker, chaque fois que cela est necessaire.
+L'instruction COPY est utilisée pour copier des fichiers depuis l'hôte vers le conteneur. Vous en aurez besoin pour copier les fichiers de configuration et les scripts shell a l'interieur de votre Docker, chaque fois que cela est necessaire.
 
 **4. ENTRYPOINT**
 
@@ -127,6 +128,10 @@ L'instruction `ENTRYPOINT` est utilisée pour spécifier la commande à exécute
 
 Instruction assez similaire a `ENTRYPOINT`. En l'absence de `ENTRYPOINT`, joue le meme role. Par contre, si l'instruction `CMD` est passee apres `ENTRYPOINT`, elle permet de passer des arguments a `ENTRYPOINT`. Il est a noter que si le Docker est lance aves des arguments, ces derniers ecraseront les arguments fournis par `CMD`.
 
+**6. EXPOSE**
+
+Permet d'ouvrir les ports specifies du containeur. Cette instruction est facultative si les ports ont ete specifies dans le docker-compose.
+
 
 ### Le docker-compose
 Comme vu precedement, un container est destine a faire tourner une seule application ou un seul service, hors il est souvent necessaire pour le bon deroulement d'un projet d'en disposer de plusieurs. C'est la que rentre en jeu le docker compose.
@@ -135,10 +140,12 @@ Pour info, YAML est un language de programmation regulierement utilise en script
 
 Ce que vous allez integrer dans votre docker-compose :
 1. Le(s) reseau(x) virtuel(s) sur le(s)quel(s) va evoluer votre projet
+
 2. Les volumes, pour la persistance des donnees (prise en compte des modifications sur les fichiers du site, et des donnees presentes dans la database, entre autres).
-3. Les services, Nginx, MariaDB, Wordpress (incluant le service PHP) pour la partie obligatoire. Le serveur FTP, Redis et un service de votre choix pour les bonus.
 
+3. Les services, Nginx, MariaDB, Wordpress (incluant le service PHP) pour la partie obligatoire. Le serveur FTP, Redis et un (ou plusieurs) service de votre choix pour les bonus.
 
+Voici un exemple, volontairement simplifie, de ce a quoi devrait ressembler votre fichier `docker-compose.yml` :
 ```
 networks:
   inception:
@@ -148,19 +155,19 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/jbertin/data/database/
+      device: REPERTOIRE_SOURCE_DU_VOLUME
   website:
     driver_opts:
       type: none
       o: bind
-      device: /home/jbertin/data/website/
+      device: REPERTOIRE_SOURCE_DU_VOLUME
 
 services:
   nginx:
     build: requirements/nginx/
     container_name: nginx
     ports:
-      - "443:443"
+      - PORTS_A_OUVRIR
     volumes:
       - "website:/var/www/html"
     depends_on:
@@ -173,7 +180,7 @@ services:
     build: requirements/wordpress/
     container_name: wordpress
     ports:
-      - "9000:9000"
+      - PORTS_A_OUVRIR
     volumes:
       - "website:/var/www/html"
     depends_on:
@@ -186,24 +193,33 @@ services:
 ```
 **Attention, l'utilisation du language YAML requiert une identation parfaite pour fonctionner !**
 
+### Le fichier .dockerignore
+Le fichier .dockerignore est utilisé pour exclure des fichiers et des répertoires spécifiques de l'image Docker qui est construite à partir d'un répertoire source. Cela permet de réduire la taille de l'image et d'éviter d'inclure des fichiers inutiles ou sensibles. Il fonctionne exactement comme un fichier .gitignore.
 
+Exemple de fichier .dockerignore :
+```
+logs/
+README.md
+secret.txt
+.DS_Store
+```
 
+### Le fichier .env (gestion de l'environnement)
+Le fichier .env est utilisé pour stocker des variables d'environnement qui seront utilisées lors de la création et du lancement de conteneurs Docker. Il permet de définir des valeurs de variables d'environnement pour des images Docker spécifiques sans avoir à les définir explicitement dans le fichier docker-compose.yml ou lors de la commande docker run.
 
-- Les commandes disponibles
-- FROM
-- RUN
-- ENTRYPOINT
-- COPY
-- WORKDIR
+Exemple de fichier .env :
+```
+DOMAIN_NAME=XXXXX.42.fr
 
-Le fichier .dockerignore
+MYSQL_HOST=mariadb
+MYSQL_ROOT_PASSWORD=123456
 
-L'environnement
+WP_DB_NAME=wordpress
+WP_DB_USER=XXXXXX
+WP_DB_PASSWORD=123456
+```
 
-Les volumes
-
-Les networks
-
+----------------------------
 Nginx
 
 MariaDB
