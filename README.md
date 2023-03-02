@@ -11,10 +11,19 @@ Avantages et inconvenients de Docker, par rapport a une machine virtuelle classi
 - Avantages : deploiement rapide, facile, et compatible avec la majorite des plateformes (Windows, OSX, Linux).
 - Inconvenients : ne s'adapte pas a tous les types de projets.
 
-Le fichier Dockerfile
+### Le fichier Dockerfile
 Un Dockerfile est un fichier texte qui contient les instructions nécessaires pour construire une image Docker. C'est en quelque sorte le Makefile d'un container.
 Le Dockerfile est utilisé pour automatiser le processus de construction d'une image Docker. Il spécifie les dépendances de l'application, les étapes d'installation, la configuration de l'environnement et les commandes pour exécuter l'application.
 Un Dockerfile ne sert qu'a deployer, normalement, qu'un seul et unique processus, application ou service.
+
+### Le docker-compose
+Comme vu precedement, un container est destine a faire tourner une seule application ou un seul service, hors ilest souvent necessaire pour le bon deroulement d'un projet d'en disposer de plusieurs. C'est la que rentre en jeu le docker compose.
+Docker Compose est un outil destiné à définir et exécuter des applications Docker à plusieurs conteneurs. Dans Compose, vous utilisez un fichier YAML pour configurer les services de votre application. Ensuite, vous créez et vous démarrez tous les services à partir de votre configuration en utilisant une seule commande.
+YAML est un language de programmation regulierement utilise en scripting, il est tres proche du language humaim et son utilisation pour les Dockers est tres facile.
+
+### Comment structurer notre projet
+
+
 
 - Les commandes disponibles
 - FROM
@@ -23,7 +32,7 @@ Un Dockerfile ne sert qu'a deployer, normalement, qu'un seul et unique processus
 - COPY
 - WORKDIR
 
-Le docker-compose
+
 
 Le makefile et ses options
 
