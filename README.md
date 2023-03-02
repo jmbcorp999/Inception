@@ -221,8 +221,6 @@ WP_DB_USER=XXXXXX
 WP_DB_PASSWORD=123456
 ```
 
-----------------------------
-
 ## Les fichiers de configuration / Les scripts
 
 Ces deux approchent, liees a la configuration des Dockers, sont complementaires. Dans certains cas, il est possible de se passer de fichiers de configuration et de script, pour d'autres cas, l'un, l'autre voir les deux seront necessaires, a vous de juger.
