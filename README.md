@@ -290,32 +290,13 @@ volumes:
 
 La strategie de travail que je vais enoncer est la mienne, ce ne sont que des conseils et il existe probablement des moyens plus efficaces, a vous de les trouver. A savoir qu'il m'a fallu 8 jours pour mettre en place le projet, full bonus.
 
-### Par ou commencer
-
-1. Mise en place de votre machine virtuelle hote.
+### Mise en place de votre machine virtuelle hote.
 
 Le projet ne s'appelle pas Inception pour rien, nous allons donc devoir commencer par deployer une machine virtuelle, a l'aide de VirtualBox, comme pour le projet Born2BeRoot. Rassurez vous, rien n'oblige a configurer votre machine en ligne de commande, vous pouvez tout a fait installer une interface graphique comme Gnome par exemple. De toute facon, vu qu'il faudra tester votre Wordpress depuis un navigateur web, il faudra bien l'installer a un moment ou un autre. Autant le faire directement et profiter de la simplicite d'un environnement graphique pour poser les bases de votre projet.
 
 Pas facile de trouver une distribution qui marche correctement sur les ordinateurs de l'ecole, **il faudra donc privilegier une distribution legere, peu gourmande en RAM**. Exemple de distributions qui rentrent dans ces criteres : Debian, Mint, Lubuntu... Faites vos recherches et vos tests par vous meme. 
 
 Quoi qu'il en soit, **je vous conseille de stocker votre VM sur une cle USB3 ou un disque dur externe**, les sessions etant tres limitees en place, et les goinfres ayant tendance a digerer plutot rapidement vos donnes. Cela ne concerne que la VM de virtualbox, le stockage de vos fichiers docker pouvant rester sur votre bureau (je le conseille meme fortement), je vous expliquerai plus tard comment partager vos donnees entre votre Mac de l'ecole, et votre VM.
-
-
-1. Creer notre serveur Nginx
-
-C'est la premiere etape a mettre en place, et aussi parmis les plus simples du projet.
-Je vous conseille, aussi bien pour ce module que pour les autres, de commencer par une de ces commandes, a taper directement dans votre terminal habituel (en fonction de la distribution choisie) :
-
-```docker run -it debian:buster bash```
-
-ou
-
-```docker run -it alpine:3.17 sh```
-
-Cette commande va verifier si l'image docker est disponible, la telecharger au besoin, lancer le docker et ouvrir un prompt `bash` ou `sh`.
-Vous allez pouvoir commencer a travailler, verifier les packages a installer, taper vos commandes et verifier les fichiers de configuration.
-
-Prenons l'exemple, pour le Docker Nginx, sous debian:buster :
 
 ### Le choix de la distribution des Dockers
 
@@ -355,6 +336,22 @@ Rien n'interdit dans le sujet de mixer ces distributions pour notre docker-compo
 &emsp;&emsp;&emsp;- Commande de base legerement differentes de bash
 
 
+
+1. Creer notre serveur Nginx
+
+C'est la premiere etape a mettre en place, et aussi parmis les plus simples du projet.
+Je vous conseille, aussi bien pour ce module que pour les autres, de commencer par une de ces commandes, a taper directement dans votre terminal habituel (en fonction de la distribution choisie) :
+
+```docker run -it debian:buster bash```
+
+ou
+
+```docker run -it alpine:3.17 sh```
+
+Cette commande va verifier si l'image docker est disponible, la telecharger au besoin, lancer le docker et ouvrir un prompt `bash` ou `sh`.
+Vous allez pouvoir commencer a travailler, verifier les packages a installer, taper vos commandes et verifier les fichiers de configuration.
+
+Prenons l'exemple, pour le Docker Nginx, sous debian:buster :
 
 
 Nginx
