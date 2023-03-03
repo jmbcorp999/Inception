@@ -288,6 +288,68 @@ volumes:
 
 ## <a name="strategie"></a>III - Strategie et conseil d'approche
 
+La strategie de travail que je vais enoncer est la mienne, ce ne sont que des conseils et il existe probablement des moyens plus efficaces, a vous de les trouver. A savoir qu'il m'a fallu 8 jours pour mettre en place le projet, full bonus.
+
+### Le choix de la distribution
+
+Par habitude j'ai choisi de sacrifier la vitesse de deploiement, pour privilegier le confort d'un environnement mieux maitrise, pour tous les modules dockers necessitant une configuration complexe. J'ai donc pour ces modules decide d'opter pour debian:buster. Pour certain docker plus simple a deployer j'ai tout de meme opte pour alpine.
+Rien n'interdit dans le sujet de mixer ces distributions pour notre docker-compose. Voici un petit recapitulatif des pour et contre, pour faciliter vos choix :
+
+**1. debian:buster**
+
+&emsp;&emsp;a. Avantages :
+
+&emsp;&emsp;&emsp;- Stable
+
+&emsp;&emsp;&emsp;- Integre bash, avec des commandes familieres
+
+&emsp;&emsp;&emsp;- Pas d'evolution de version possible entre le demarrage du sujet et son rendu
+
+&emsp;&emsp;b. Inconvenients :
+
+&emsp;&emsp;&emsp;- Plus lent a deployer
+
+&emsp;&emsp;&emsp;- Pas de gestion native de PHP au dela du 7.3
+
+&emsp;&emsp;&emsp;- Plus lourd (50 mo)
+
+**2. alpine:3.17**
+
+&emsp;&emsp;a. Avantages :
+
+&emsp;&emsp;&emsp;- Deploiement plus rapide (em moyenne 2 fois plus rapide)
+
+&emsp;&emsp;&emsp;- Plus leger (5 mo)
+
+&emsp;&emsp;b. Inconvenients :
+
+&emsp;&emsp;&emsp;- Certaines version, lors de mes tests, se sont averees instables sur le gestion de certains process
+
+&emsp;&emsp;&emsp;- Commande de base legerement differentes de bash
+
+### Par ou commencer
+
+1. Creer notre serveur Nginx
+
+C'est la premiere etape a mettre en place, et aussi parmis les plus simples du projet.
+Je vous conseille, aussi bien pour ce module que pour les autres, de commencer par une de ces commandes (en fonction de la distribution choisie) :
+
+```docker run -it debian:buster bash```
+
+ou
+
+```docker run -it alpine:3.17 sh```
+
+Cette commande va verifier si l'image docker est disponible, la telecharger au besoin, lancer le docker et ouvrir un prompt `bash` ou `sh`.
+Vous allez pouvoir commencer a travailler, verifier les packages a installer, taper vos commandes et verifier les fichiers de configuration.
+
+Prenons l'exemple, pour le Docker Nginx, sous debian:buster :
+
+
+
+
+
+
 Nginx
 
 MariaDB
