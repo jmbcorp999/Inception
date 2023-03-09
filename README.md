@@ -26,9 +26,9 @@ Ce document a pour but de vous aider a comprendre le principe des Dockers, mieux
 
 [&emsp;III - Strategie et conseil d'approche](#strategie)
 
-<br><br><br>    
+<br><br>  
 ---
-<br><br><br>
+<br><br>
 
 ## <a name="notions"></a>I - Notions generales
 
@@ -298,9 +298,11 @@ Pas facile de trouver une distribution qui marche correctement sur les ordinateu
 
 Quoi qu'il en soit, **je vous conseille de stocker votre VM sur une cle USB3 ou un disque dur externe**, les sessions etant tres limitees en place, et les goinfres ayant tendance a digerer plutot rapidement vos donnes. Cela ne concerne que la VM de virtualbox, le stockage de vos fichiers docker pouvant rester sur votre bureau (je le conseille meme fortement), je vous expliquerai plus tard comment partager vos donnees entre votre Mac de l'ecole, et votre VM.
 
+Je vous passe les etapes d'installation de docker et docker-compose, il y a suffisamment de tuto disponibles sur internet pour le faire.
+
 ### Le choix de la distribution des Dockers
 
-Par habitude j'ai choisi de sacrifier la vitesse de deploiement, pour privilegier le confort d'un environnement mieux maitrise, pour tous les modules dockers necessitant une configuration complexe. J'ai donc pour ces modules decide d'opter pour debian:buster. Pour certain docker plus simple a deployer j'ai tout de meme opte pour alpine.
+Par habitude, j'ai choisi de sacrifier la vitesse de deploiement, pour privilegier le confort d'un environnement mieux maitrise, pour tous les modules dockers necessitant une configuration complexe. J'ai donc pour ces modules decide d'opter pour debian:buster. Pour certain docker plus simple a deployer j'ai tout de meme opte pour alpine.
 Rien n'interdit dans le sujet de mixer ces distributions pour notre docker-compose. Voici un petit recapitulatif des pour et contre, pour faciliter vos choix :
 
 **1. debian:buster**
@@ -352,6 +354,12 @@ Cette commande va verifier si l'image docker est disponible, la telecharger au b
 Vous allez pouvoir commencer a travailler, verifier les packages a installer, taper vos commandes et verifier les fichiers de configuration.
 
 Prenons l'exemple, pour le Docker Nginx, sous debian:buster :
+
+Nous allons commencer, pour l'entrainement, a lancer la commande precedente : `docker run -it debian:buster bash`. Nous nous retrouvons face un terminal bash.
+
+Il faut d'abord, et je vous conseille d'en faire de meme pour tous vos dockers, commencer par mettre a jour la liste des paquets disponibles avec la commande `apt update` ou `apt-get update`. La difference entre `apt` et `apt-get` reside dans le fait que `apt-get` est plus bas niveau que `apt` et donc moins visuel. Pour les scripts il est generalement conseille d'utiliser `apt-get`, mais pour notre cas a nous, cela n'a pas une importance capitale. Cette etape consiste bien a mettre a jour la **liste des paquets disponibles** et non pas les paquets eux meme ! 
+
+Pour mettre a jour les paquets, il faut utiliser la commande `apt upgrade -y`. Il faut se poser la question : est ce utile de les mettre a jour pour nos Docker, sachant que cela va ralentir leur deploiement ? Je vous laisse seuls juges. En tout cas, si vous choisissez de le faire n'oubliez pas le flag `-y` qui va permettre de valider automatiquement votre choix !
 
 
 Nginx
