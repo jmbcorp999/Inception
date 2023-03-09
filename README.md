@@ -25,12 +25,17 @@ Ce document a pour but de vous aider a comprendre le principe des Dockers, mieux
 [&emsp;Les scripts](#script)
 
 [&emsp;III - Strategie et conseil d'approche](#strategie)
-[&emsp;III - Strategie et conseil d'approche](#strategie)
-[&emsp;III - Strategie et conseil d'approche](#strategie)
-[&emsp;III - Strategie et conseil d'approche](#strategie)
 
+[&emsp;&emsp;1. Mise en place de votre machine virtuelle hote](#vm)
 
-### 2. <a name="nginx"></a>Creer notre serveur Nginx
+[&emsp;&emsp;2. Le choix de la distribution des Dockers](#dockerchoice)
+
+[&emsp;&emsp;3. Comprendre les dependances](#depend)
+
+[&emsp;&emsp;4. Creer notre serveur Nginx](#nginx)
+
+[&emsp;&emsp;5. Transposer dans le docker compose](#transpose)
+
 
 
 <br><br>  
@@ -297,7 +302,7 @@ volumes:
 
 La strategie de travail que je vais enoncer est la mienne, ce ne sont que des conseils et il existe probablement des moyens plus efficaces, a vous de les trouver. A savoir qu'il m'a fallu 8 jours pour mettre en place le projet, full bonus.
 
-### <a name="vm"></a>Mise en place de votre machine virtuelle hote.
+### <a name="vm"></a>1. Mise en place de votre machine virtuelle hote.
 
 Le projet ne s'appelle pas Inception pour rien, nous allons donc devoir commencer par deployer une machine virtuelle, a l'aide de VirtualBox, comme pour le projet Born2BeRoot. Rassurez vous, rien n'oblige a configurer votre machine en ligne de commande, vous pouvez tout a fait installer une interface graphique comme Gnome par exemple. De toute facon, vu qu'il faudra tester votre Wordpress depuis un navigateur web, il faudra bien l'installer a un moment ou un autre. Autant le faire directement et profiter de la simplicite d'un environnement graphique pour poser les bases de votre projet.
 
@@ -309,7 +314,7 @@ Je vous passe les etapes d'installation de docker et docker-compose, il y a suff
 
 ----
 
-### <a name="dockerchoice"></a>Le choix de la distribution des Dockers
+### <a name="dockerchoice"></a>2. Le choix de la distribution des Dockers
 
 Par habitude, j'ai choisi de sacrifier la vitesse de deploiement, pour privilegier le confort d'un environnement mieux maitrise, pour tous les modules dockers necessitant une configuration complexe. J'ai donc pour ces modules decide d'opter pour debian:buster. Pour certain docker plus simple a deployer j'ai tout de meme opte pour alpine.
 Rien n'interdit dans le sujet de mixer ces distributions pour notre docker-compose. Voici un petit recapitulatif des pour et contre, pour faciliter vos choix :
@@ -348,7 +353,7 @@ Rien n'interdit dans le sujet de mixer ces distributions pour notre docker-compo
 
 ----
 
-### 1. <a name="depend"></a>Comprendre les dependances
+### <a name="depend"></a>3. Comprendre les dependances
 
 Certains de nos Dockers ne peuvent pas fonctionner tant qu'un autre n'est pas en cours d'execution, on parle de dependance. Reprenons notre exemple de docker-compose cite plus haut :
 
@@ -373,7 +378,7 @@ Donc logiquement, nos Dockers vont etre deployes dans l'ordre suivant : `MariaDB
 
 ----
 
-### 2. <a name="nginx"></a>Creer notre serveur Nginx
+### 2. <a name="nginx"></a>4. Creer notre serveur Nginx
 
 C'est la premiere etape a mettre en place, et aussi parmis les plus simples du projet.
 Je vous conseille, aussi bien pour ce module que pour les autres, de commencer par une de ces commandes, a taper directement dans votre terminal habituel (en fonction de la distribution choisie) :
@@ -460,7 +465,7 @@ Bien qu'il soit possible de grouper autant de commande que l'on souhaite avec de
 
 ----
 
-### 2. Transposer dans le docker compose
+### 5. Transposer dans le docker compose
 
 
 
