@@ -24,17 +24,17 @@ Ce document a pour but de vous aider a comprendre le principe des Dockers, mieux
 
 [&emsp;Les scripts](#script)
 
-[&emsp;III - Strategie et conseil d'approche](#strategie)
+[III - Strategie et conseil d'approche](#strategie)
 
-[&emsp;&emsp;1. Mise en place de votre machine virtuelle hote](#vm)
+[&emsp;1. Mise en place de votre machine virtuelle hote](#vm)
 
-[&emsp;&emsp;2. Le choix de la distribution des Dockers](#dockerchoice)
+[&emsp;2. Le choix de la distribution des Dockers](#dockerchoice)
 
-[&emsp;&emsp;3. Comprendre les dependances](#depend)
+[&emsp;3. Comprendre les dependances](#depend)
 
-[&emsp;&emsp;4. Creer notre serveur Nginx](#nginx)
+[&emsp;4. Creer notre serveur Nginx](#nginx)
 
-[&emsp;&emsp;5. Transposer dans le docker compose](#transpose)
+[&emsp;5. Transposer dans le docker compose](#transpose)
 
 
 
