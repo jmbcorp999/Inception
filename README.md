@@ -341,7 +341,28 @@ Rien n'interdit dans le sujet de mixer ces distributions pour notre docker-compo
 
 ----
 
-### 1. Creer notre serveur Nginx
+### 1. Comprendre les dependances
+
+Certains de nos Dockers ne peuvent pas fonctionner tant qu'un autre n'est pas en cours d'execution, on parle de dependance. Reprenons notre exemple de docker-compose cite plus haut :
+
+```
+services:
+  nginx:
+    build: requirements/nginx/
+    container_name: nginx
+    ports:
+      - PORTS_A_OUVRIR
+    volumes:
+      - "website:/var/www/html"
+    **depends_on:**
+      - wordpress
+    networks:
+      - inception
+    restart: always
+```
+
+
+### 2. Creer notre serveur Nginx
 
 C'est la premiere etape a mettre en place, et aussi parmis les plus simples du projet.
 Je vous conseille, aussi bien pour ce module que pour les autres, de commencer par une de ces commandes, a taper directement dans votre terminal habituel (en fonction de la distribution choisie) :
@@ -424,7 +445,13 @@ COPY	conf/nginx.conf /etc/nginx/conf.d/default.conf
 ENTRYPOINT	["nginx", "-g", "daemon off;"]
 
 ```
-Bien qu'il soit possible de grouper autant de commande que l'on souhaite avec des `&&` ou des `;`, j'ai tendance a favoriser le regroupement de commandes suivant une certaine logique. Dans mon exemple nous pouvons voir, 1 - update / install, 2 - creation des dossiers, 3 - gestion du SSL, 4 - configuration, 5 - lancement du 
+Bien qu'il soit possible de grouper autant de commande que l'on souhaite avec des `&&` ou des `;`, j'ai tendance a favoriser le regroupement de commandes suivant une certaine logique. Dans mon exemple nous pouvons voir, 1 - update / install, 2 - creation des dossiers, 3 - gestion du SSL, 4 - configuration, 5 - lancement du serveur.
+
+----
+
+### 2. Transposer dans le docker compose
+
+
 
 MariaDB
 
