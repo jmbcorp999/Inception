@@ -339,7 +339,7 @@ Rien n'interdit dans le sujet de mixer ces distributions pour notre docker-compo
 
 
 
-1. Creer notre serveur Nginx
+**1. Creer notre serveur Nginx**
 
 C'est la premiere etape a mettre en place, et aussi parmis les plus simples du projet.
 Je vous conseille, aussi bien pour ce module que pour les autres, de commencer par une de ces commandes, a taper directement dans votre terminal habituel (en fonction de la distribution choisie) :
@@ -355,14 +355,54 @@ Vous allez pouvoir commencer a travailler, verifier les packages a installer, ta
 
 Prenons l'exemple, pour le Docker Nginx, sous debian:buster :
 
+**Attention : les commandes suivantes ne sont valables que sur Debian ! Sur Alpine les commandes different, par exemple `apt install` est remplace par `apk add`!**
+
 Nous allons commencer, pour l'entrainement, a lancer la commande precedente : `docker run -it debian:buster bash`. Nous nous retrouvons face un terminal bash.
 
 Il faut d'abord, et je vous conseille d'en faire de meme pour tous vos dockers, commencer par mettre a jour la liste des paquets disponibles avec la commande `apt update` ou `apt-get update`. La difference entre `apt` et `apt-get` reside dans le fait que `apt-get` est plus bas niveau que `apt` et donc moins visuel. Pour les scripts il est generalement conseille d'utiliser `apt-get`, mais pour notre cas a nous, cela n'a pas une importance capitale. Cette etape consiste bien a mettre a jour la **liste des paquets disponibles** et non pas les paquets eux meme ! 
 
 Pour mettre a jour les paquets, il faut utiliser la commande `apt upgrade -y`. Il faut se poser la question : est ce utile de les mettre a jour pour nos Docker, sachant que cela va ralentir leur deploiement ? Je vous laisse seuls juges. En tout cas, si vous choisissez de le faire n'oubliez pas le flag `-y` qui va permettre de valider automatiquement votre choix !
 
+Maintenant, attaquons le coeur du sujet, installer Nginx. Vu que c'est le premier Docker, je vais vous aider de facon plus complete que je ne le ferais sur les prochains. Pour rappel, le sujet indique **Un container Docker contenant NGINX avec TLSv1.2 ou TLSv1.3 uniquement.**. Il va donc falloir installer installer Nginx ET un moyen de generer des certificats SSL. Nous pouvons installer les deux en meme temps et sans que le prompt nous demande confirmation, Il faut donc taper la commande `apt install -y nginx openssl`, et oui, encore une fois, n'oubliez pas le flag `-y`.
 
-Nginx
+Pour l'instant, si nous avons suivi les etapes notre fichier Docker devrait ressembler a ca :
+
+```
+FROM	debian:buster
+RUN		apt update; apt install -y nginx openssl
+```
+Notez que je n'utilise qu'une commande `RUN` pour limiter les surcouches crees, et donc eviter de ralentir inutilement le deploiement.
+
+Ensuite nous allons generer un certificat SSL, ainsi que sa cle, en commencant par creer le dossier (non obligatoire, vous pouvez choisir de les placer dans un dossier deja existant, j'ai choisi de le faire pour etre plus propre) :
+```
+RUN		mkdir -p /etc/nginx/ssl; openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/ssl_certificat.pem -keyout /etc/nginx/ssl/ssl_key.key -subj "/C=FR/ST=Nice/L=Nice/O=42/OU=VOTRE_LOGIN/CN=VOTRE_LOGIN/"
+```
+
+Particularite de Nginx, il ne peux demarrer que si le dossier `/run/nginx` existe. Nous allons donc nous en assurer, avec une commande simple `mkdir -p /run/nginx`. L'argument `-p` va etre notre meilleur ami, a chaque fois nous aurons besoin de creer un dossier ! Il permet a `mkdir` de creer tous les dossiers parents si necessaire (avec les droits 777), et aucune erreur ne sera reportee si le dossier existe deja, donc aucun risque de plantage de creation de notre Docker en effectuant cette commande !
+
+Maintenant, avant de demarrer notre serveur Nginx, il va falloir s'occuper de sa configuration, le plus simple etant de modifier le fichier en local, et d'utiliser la commande `COPY` pour copier notre configuration au bon endroit, a l'interieur de notre Docker. Voici une partie de notre fichier de configuration :
+```
+server {
+
+	listen 443 ssl;
+	listen [::]:443 ssl;
+
+	server_name inception;
+
+	ssl_certificate /etc/nginx/ssl/ssl_certificat.pem;
+	ssl_certificate_key /etc/nginx/ssl/ssl_key.key;
+	ssl_protocols TLSv1.2 TLSv1.3;
+
+	root /var/www/html;
+	index index.php index.html index.htm;
+
+	location / {
+		autoindex on;
+		try_files $uri $uri/ =404;
+	}
+    /* Il faudra rajouter la partie concernant PHP ici  */
+}
+```
 
 MariaDB
 
