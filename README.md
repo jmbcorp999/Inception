@@ -378,9 +378,9 @@ Donc logiquement, nos Dockers vont etre deployes dans l'ordre suivant : `MariaDB
 
 ----
 
-### 2. <a name="nginx"></a>4. Creer notre serveur Nginx
+### 4. <a name="nginx"></a>4. Creer notre serveur Nginx
 
-C'est la premiere etape a mettre en place, et aussi parmis les plus simples du projet.
+C'est la premiere etape a mettre en place, et aussi parmis les plus simples du projet. Pourquoi le premiere alors que c'est le dernier Docker a se lancer ? Tout simplement car le serveur Web est le coeur de notre projet !
 Je vous conseille, aussi bien pour ce module que pour les autres, de commencer par une de ces commandes, a taper directement dans votre terminal habituel (en fonction de la distribution choisie) :
 
 ```docker run -it debian:buster bash```
@@ -394,7 +394,7 @@ Vous allez pouvoir commencer a travailler, verifier les packages a installer, ta
 
 Prenons l'exemple, pour le Docker Nginx, sous debian:buster :
 
-**Attention : les commandes suivantes ne sont valables que sur Debian ! Sur Alpine les commandes different, par exemple `apt install` est remplace par `apk add`!**
+**Attention : les commandes suivantes ne sont valables que sur Debian ! Sur Alpine les commandes different, par exemple `apt install` est remplace par `apk add` !**
 
 Nous allons commencer, pour l'entrainement, a lancer la commande precedente : `docker run -it debian:buster bash`. Nous nous retrouvons face un terminal bash.
 
@@ -463,10 +463,18 @@ ENTRYPOINT	["nginx", "-g", "daemon off;"]
 ```
 Bien qu'il soit possible de grouper autant de commande que l'on souhaite avec des `&&` ou des `;`, j'ai tendance a favoriser le regroupement de commandes suivant une certaine logique. Dans mon exemple nous pouvons voir, 1 - update / install, 2 - creation des dossiers, 3 - gestion du SSL, 4 - configuration, 5 - lancement du serveur.
 
+La prochaine etape consiste a tester notre Docker. Pour cela, il faut ouvrir une page web et se rendre a l'adresse `https://127.0.0.1`. **Ne pas oublier le 's', puisque nous avons configure le serveur pour qu'il n'accepte que les connexions sur le port 443, qui correspond a un site 'securise'.**
+
+Si tout s'est bien deroule nous devrions atterir sur la page d'accueil de Nginx. Pour finir et pour faciliter nos futurs tests, nous allons editer notre fichier hosts : `/etc/hosts`. Ce fichier permet de rediriger un nom de domaine vers une IP. L'objectif est qu'a chaque fois que vous vous connectiez sur https://VOTRE_LOGIN.42.fr vous soyez rediriges vers https://127.0.0.1. Il suffit de rajouter la ligne suivante :
+```
+127.0.0.1 VOTRE_LOGIN.42.fr
+```
+
 ----
 
-### 5. Transposer dans le docker compose
+### 5. <a name="transpose"></a>Transposer dans le docker compose
 
+A ce stade, nous devrions avoir un serveur web, pas tres utile car limite. Pour pouvoir continuer notre projet, nous allons arreter de faire appeler a notre dockerfile en direct, et allons commencer a faire appel a notre docker-compose. Pourquoi ? Parce qu'evidemment, aucune communication n'est possible entre nos Dockers, sans reseau virtuel attaches a ces derniers ! De plus, nous allons commencer des a present 
 
 
 MariaDB
