@@ -329,7 +329,7 @@ Rien n'interdit dans le sujet de mixer ces distributions pour notre docker-compo
 
 &emsp;&emsp;a. Avantages :
 
-&emsp;&emsp;&emsp;- Deploiement plus rapide (em moyenne 2 fois plus rapide)
+&emsp;&emsp;&emsp;- Deploiement plus rapide (en moyenne 2 fois plus rapide)
 
 &emsp;&emsp;&emsp;- Plus leger (5 mo)
 
@@ -365,7 +365,7 @@ Il faut d'abord, et je vous conseille d'en faire de meme pour tous vos dockers, 
 
 Pour mettre a jour les paquets, il faut utiliser la commande `apt upgrade -y`. Il faut se poser la question : est ce utile de les mettre a jour pour nos Docker, sachant que cela va ralentir leur deploiement ? Je vous laisse seuls juges. En tout cas, si vous choisissez de le faire n'oubliez pas le flag `-y` qui va permettre de valider automatiquement votre choix !
 
-Maintenant, attaquons le coeur du sujet, installer Nginx. Vu que c'est le premier Docker, je vais vous aider de facon plus complete que je ne le ferais sur les prochains. Pour rappel, le sujet indique **Un container Docker contenant NGINX avec TLSv1.2 ou TLSv1.3 uniquement.**. Il va donc falloir installer installer Nginx ET un moyen de generer des certificats SSL. Nous pouvons installer les deux en meme temps et sans que le prompt nous demande confirmation, Il faut donc taper la commande `apt install -y nginx openssl`, et oui, encore une fois, n'oubliez pas le flag `-y`.
+Maintenant, attaquons le coeur du sujet, installer Nginx. Vu que c'est le premier Docker, je vais vous aider de facon plus complete que je ne le ferais sur les prochains. Pour rappel, le sujet indique **Un container Docker contenant NGINX avec TLSv1.2 ou TLSv1.3 uniquement**. Il va donc falloir installer installer Nginx ET un moyen de generer des certificats SSL. Nous pouvons installer les deux en meme temps et sans que le prompt nous demande confirmation, Il faut donc taper la commande `apt install -y nginx openssl`, et oui, encore une fois, n'oubliez pas le flag `-y`.
 
 Pour l'instant, si nous avons suivi les etapes notre fichier Docker devrait ressembler a ca :
 
@@ -382,7 +382,8 @@ RUN		mkdir -p /etc/nginx/ssl; openssl req -newkey rsa:4096 -x509 -sha256 -days 3
 
 Particularite de Nginx, il ne peux demarrer que si le dossier `/run/nginx` existe. Nous allons donc nous en assurer, avec une commande simple `mkdir -p /run/nginx`. L'argument `-p` va etre notre meilleur ami, a chaque fois nous aurons besoin de creer un dossier ! Il permet a `mkdir` de creer tous les dossiers parents si necessaire (avec les droits 777), et aucune erreur ne sera reportee si le dossier existe deja, donc aucun risque de plantage de creation de notre Docker en effectuant cette commande !
 
-Maintenant, avant de demarrer notre serveur Nginx, il va falloir s'occuper de sa configuration, le plus simple etant de modifier le fichier en local, et d'utiliser la commande `COPY` pour copier notre configuration au bon endroit, a l'interieur de notre Docker. Voici une partie de notre fichier de configuration :
+Maintenant, avant de demarrer notre serveur Nginx, il va falloir s'occuper de sa configuration, le plus simple etant de modifier le fichier en local, et d'utiliser la commande `COPY` pour copier notre configuration au bon endroit (`/etc/nginx/conf.d/default.conf`), a l'interieur de notre Docker. Voici a quoi ressemble notre fichier de configuration :
+
 ```
 server {
 
@@ -402,9 +403,28 @@ server {
 		autoindex on;
 		try_files $uri $uri/ =404;
 	}
-    /* Il faudra rajouter la partie concernant PHP ici  */
+    /* Il faudra rajouter ici, plus tard, la partie concernant PHP */
 }
 ```
+
+Maintenant que tout est pret, nous pouvons lancer notre serveur, la commande est simple : `ENTRYPOINT	["nginx", "-g", "daemon off;"]`. Si vous avez pris la peine de lire les differentes etapes, vous savez pourquoi j'utilise `ENTRYPOINT` et la facon correcte de lui transmettre commande et arguments. Concernant les arguments, a savoir : `-g daemon off`, rappelez vous que notre sujet dit **Informez-vous sur le fonctionnement des ’daemons’ et dans quels cas y avoir recours est pertinent**. Et bien je vous le donne en mille, c'est precisement le moment ! Sans cette directive, le serveur sera lance et tournera en fond, mais le Docker considerera que le processus est termine. Et comment se comporte un Docker dont le processus a executer est termine ? Et bien il s'arrete, tout simplement.
+
+Voila, nous avons fini avec la configuration de notre Docker Nginx, voila a quoi ressemble notre fichier dockerfile :
+```
+FROM	debian:buster
+
+RUN		apt update; apt install -y nginx openssl
+
+RUN		mkdir -p /etc/nginx/ssl; mkdir -p /run/nginx
+RUN		openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/ssl_certificat.pem -keyout /etc/nginx/ssl/ssl_key.key \
+		-subj "/C=FR/ST=Nice/L=Nice/O=42/OU=VOTRE_LOGIN/CN=VOTRE_LOGIN/"
+
+COPY	conf/nginx.conf /etc/nginx/conf.d/default.conf
+
+ENTRYPOINT	["nginx", "-g", "daemon off;"]
+
+```
+Bien qu'il soit possible de grouper autant de commande que l'on souhaite avec des `&&` ou des `;`, j'ai tendance a favoriser le regroupement de commandes suivant une certaine logique. Dans mon exemple nous pouvons voir, 1 - update / install, 2 - creation des dossiers, 3 - gestion du SSL, 4 - configuration, 5 - lancement du 
 
 MariaDB
 
