@@ -300,6 +300,8 @@ Quoi qu'il en soit, **je vous conseille de stocker votre VM sur une cle USB3 ou 
 
 Je vous passe les etapes d'installation de docker et docker-compose, il y a suffisamment de tuto disponibles sur internet pour le faire.
 
+----
+
 ### Le choix de la distribution des Dockers
 
 Par habitude, j'ai choisi de sacrifier la vitesse de deploiement, pour privilegier le confort d'un environnement mieux maitrise, pour tous les modules dockers necessitant une configuration complexe. J'ai donc pour ces modules decide d'opter pour debian:buster. Pour certain docker plus simple a deployer j'ai tout de meme opte pour alpine.
@@ -337,9 +339,9 @@ Rien n'interdit dans le sujet de mixer ces distributions pour notre docker-compo
 
 &emsp;&emsp;&emsp;- Commande de base legerement differentes de bash
 
+----
 
-
-**1. Creer notre serveur Nginx**
+### 1. Creer notre serveur Nginx
 
 C'est la premiere etape a mettre en place, et aussi parmis les plus simples du projet.
 Je vous conseille, aussi bien pour ce module que pour les autres, de commencer par une de ces commandes, a taper directement dans votre terminal habituel (en fonction de la distribution choisie) :
