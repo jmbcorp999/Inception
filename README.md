@@ -348,19 +348,23 @@ Certains de nos Dockers ne peuvent pas fonctionner tant qu'un autre n'est pas en
 ```
 services:
   nginx:
-    build: requirements/nginx/
-    container_name: nginx
-    ports:
-      - PORTS_A_OUVRIR
-    volumes:
-      - "website:/var/www/html"
-    **depends_on:**
+    [...]
+    depends_on:
       - wordpress
-    networks:
-      - inception
-    restart: always
+    [...]
 ```
 
+Pour definir une priorite d'execution, nous allons donc etablir des dependances entre les dockers. Pour faire simple :
+
+Nginx -> depend de Wordpress, puisqu'un serveur sans fichier ne sert a rien, et que PHP est inclu dans worpress (pour rappel notre configuration du serveur va inclure cet etat de fait !)
+
+Wordpress -> depend de Mariadb, puisque pour installer notre wordpress, il va falloir que PHP fonctionne, la dessus c'est ok puisque notre Docker l'integre, mais va avoir egalement besoin d'une base de donnee ainsi que d'un gestionnaire (MariaDB).
+
+Mariadb -> ne depend pas d'un autre docker
+
+Donc logiquement, nos Dockers vont etre deployes dans l'ordre suivant : `MariaDB`, 'Wordpress', puis pour finir 'Nginx'.
+
+----
 
 ### 2. Creer notre serveur Nginx
 
