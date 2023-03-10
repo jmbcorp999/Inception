@@ -476,22 +476,55 @@ Si tout s'est bien deroule nous devrions atterir sur la page d'accueil de Nginx.
 
 A ce stade, nous devrions avoir un serveur web, pas tres utile car limite, mais en ssl, c'est deja ca. Pour pouvoir continuer notre projet, nous allons arreter de faire appeler a notre dockerfile en direct, et allons commencer a faire appel a notre docker-compose. Pourquoi ? Parce qu'evidemment, aucune communication n'est possible entre nos Dockers, sans reseau virtuel attaches a ces derniers ! De plus, nous allons commencer des a present a integrer la notion de volume, pour assurer la persistance des donnees necessaire pour les Dockers `MariaDB` (sa base de donnee) et `Wordpress` (les fichiers qui compose le site).
 
+**Configuration de l'environnement**
+Si vous avez ete attentifs, vous remarquerez qu'au moment de la creation des certificats SSL, nous avons besoin de transmettre a la commande VOTRE_LOGIN. A ce stade vous avez encore le choix, soit le saisir en dur, soit passer par une variable environnement, bientot, pour tout ce qui est mot de passe vous n'aurez plus le choix, il faudra passer les informations par le biais des variables environnement.
+
+C'est la qu'il va falloir utiliser votre fichier .env. Rappelez vous l'exemple plus haut :
+```
+DOMAIN_NAME=XXXXX.42.fr
+
+MYSQL_HOST=mariadb
+MYSQL_ROOT_PASSWORD=123456
+
+WP_DB_NAME=wordpress
+WP_DB_USER=XXXXXX
+WP_DB_PASSWORD=123456
+```
+
+Pourquoi ne pas utiliser cette methodologie pour votre premiere ligne avec quelque chose comme `LOGIN=XXXXXXX` ? Il suffira de modifier votre commande openssl, en integrant $LOGIN !
+
 ----
 
 ### 6. <a name="mariadb"></a>Creer notre Docker Mariadb
 
-A compter de maintenant je vais me contenter de pseudo code et de methodologie point par point. Si vous avez suvi mes precedentes consignes vous devriez etre en mesure de transcrire mes propos et applique les etapes sans difficulte.
-Pour ce Dockerfile, la creation sera assez rapide. Le plus long sera le script de configuration.
+A compter de maintenant je vais me contenter de pseudo code et de methodologie point par point. Si vous avez suvi mes precedentes consignes vous devriez etre en mesure de transcrire mes propos et appliquer les etapes sans difficulte.
+Pour ce Dockerfile, la creation sera assez rapide. Le plus long sera le script de configuration. Encore une fois, je vous conseille de deployer un docker "vierge" et de tester vos script / commande a l'interieur.
 
-Nous commencons par creer un dockerfile, contenant les etapes :
+**Nous commencons par creer un dockerfile, contenant les etapes :**
 ```
-DEPUIS&emsp;la distribution choisie
-LANCE&emsp;mise a jour des paquets, installe mariadb et mariadb-client
-COPIE&emsp;le_nom_de_votre_script destination_de_votre_script
-POINT D'ENTREE&emsp; bash / sh,  le_nom_de_votre_script
+DEPUIS	la distribution choisie
+LANCE	mise a jour des paquets, installe mariadb et mariadb-client
+COPIE	le_nom_de_votre_script destination_de_votre_script
+POINT D'ENTREE	bash / sh,  le_nom_de_votre_script
 ```
 
-MariaDB
+**Ensuite on s'attaque a notre script :**
+```
+#!/bin/sh
+
+1 - Verifier si le dossier `/run/mysqld` existe deja, sinon le creer et fixer les bons droits
+2 - Verifier si le dossier de votre base de donnee existe deja, sinon :
+	Creer la base de donnee avec la commande mysql_install_db (je vous laisse trouver les arguments necessaires)
+	Effectuer une installation mysql_secure_installation (voir ici une technique se basant sur mysql -e  https://stackoverflow.com/questions/24270733/automate-mysql-secure-installation-with-echo-command-via-a-shell-script ou ici plusieurs autres se basant majoritairement sur la creation d'un fichier envoye a la commande mysql https://gist.github.com/Mins/4602864) -> c'est l'etape la plus compliquee.
+3 - Modifier le fichier mariadb-server.cnf, et plus particulierement les lignes skip-networking (a commenter ou supprimer) et bind-address (indice : 0.0.0.0). Pour cette etape, beaucoup de solutions possibles, mais un sed -i permet de remplacer les donnees directement dans le fichier, ce qui pourrait etre a la fois utile et rapide.
+4 - Lancer mysql (mysqld ?) en mode console.
+```	
+
+Vu que c'est notre premier script, je vais vous donner un conseil qui pourrait vous faciliter la vie. En C nous utilisons tous plus ou moins la meme technique, coller des printf un peu partout pour voir ou ca foire, ou s'assurer que l'on rentre dans une condition. Et bien, nous pouvons faire de meme en bash ! Il suffit de mettre, a chaque fois que l'on a besoin de debuguer notre script, une commande `echo "XXXXX"` ! Ainsi nos messages s'afficheront dans nos logs a la creation des Dockers ou pendant leur fonctionnement, pour nous permettre de nous assurer que tout fonctionne ou pour trouver la source de nos erreurs.
+
+----
+
+### 7. <a name="wordpress"></a>Creer notre Docker Wordpress
 
 Wordpress
 
