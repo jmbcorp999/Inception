@@ -474,8 +474,22 @@ Si tout s'est bien deroule nous devrions atterir sur la page d'accueil de Nginx.
 
 ### 5. <a name="transpose"></a>Transposer dans le docker compose
 
-A ce stade, nous devrions avoir un serveur web, pas tres utile car limite. Pour pouvoir continuer notre projet, nous allons arreter de faire appeler a notre dockerfile en direct, et allons commencer a faire appel a notre docker-compose. Pourquoi ? Parce qu'evidemment, aucune communication n'est possible entre nos Dockers, sans reseau virtuel attaches a ces derniers ! De plus, nous allons commencer des a present 
+A ce stade, nous devrions avoir un serveur web, pas tres utile car limite, mais en ssl, c'est deja ca. Pour pouvoir continuer notre projet, nous allons arreter de faire appeler a notre dockerfile en direct, et allons commencer a faire appel a notre docker-compose. Pourquoi ? Parce qu'evidemment, aucune communication n'est possible entre nos Dockers, sans reseau virtuel attaches a ces derniers ! De plus, nous allons commencer des a present a integrer la notion de volume, pour assurer la persistance des donnees necessaire pour les Dockers `MariaDB` (sa base de donnee) et `Wordpress` (les fichiers qui compose le site).
 
+----
+
+### 6. <a name="mariadb"></a>Creer notre Docker Mariadb
+
+A compter de maintenant je vais me contenter de pseudo code et de methodologie point par point. Si vous avez suvi mes precedentes consignes vous devriez etre en mesure de transcrire mes propos et applique les etapes sans difficulte.
+Pour ce Dockerfile, la creation sera assez rapide. Le plus long sera le script de configuration.
+
+Nous commencons par creer un dockerfile, contenant les etapes :
+```
+DEPUIS&emsp;la distribution choisie
+LANCE&emsp;mise a jour des paquets, installe mariadb et mariadb-client
+COPIE&emsp;le_nom_de_votre_script destination_de_votre_script
+POINT D'ENTREE&emsp; bash / sh,  le_nom_de_votre_script
+```
 
 MariaDB
 
