@@ -547,9 +547,14 @@ Vous trouverez la liste des extentions [ICI](https://make.wordpress.org/hosting/
 
 Si vous choisissez un Docker base sur `debian:buster` vous devrez vous contenter de PHP 7.3, moins securise mais plus simple a mettre en place, sur `alpine`, place a la version 8.
 
-Les bonus :
+###Les bonus :
+
 - Redis
-- Serveur FTP
-- Site statique
+
+- Serveur FTP -> [Regarder ICI](https://www.malekal.com/proftpd-configurer-un-serveur-ftp-sur-debian-10/)
+
+- Site statique -> Une page web suffit ! Pas besoin d'aide sur ce point.
+
 - Portainer
-- Autres idees de bonus
+
+- Autres idees de bonus : regardez du cote des analyseurs de logs par exemple...
