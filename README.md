@@ -313,7 +313,7 @@ Pas facile de trouver une distribution qui marche correctement sur les ordinateu
 
 Quoi qu'il en soit, **je vous conseille de stocker votre VM sur une cle USB3 ou un disque dur externe**, les sessions etant tres limitees en place, et les goinfres ayant tendance a digerer plutot rapidement vos donnes. Cela ne concerne que la VM de virtualbox, le stockage de vos fichiers docker pouvant rester sur votre bureau (je le conseille meme fortement), je vous expliquerai plus tard comment partager vos donnees entre votre Mac de l'ecole, et votre VM.
 
-Je vous passe les etapes d'installation de docker et docker-compose, il y a suffisamment de tuto disponibles sur internet pour le faire.
+Je vous passe les etapes d'installation de docker et docker-compose (attention, `docker-compose` et `docker compose`, sont deux choses differentes. [Lisez ceci](https://docs.docker.com/compose/install/linux/)), il y a suffisamment de tuto disponibles sur internet pour le faire.
 
 ----
 
@@ -547,7 +547,7 @@ Vous trouverez la liste des extentions [ICI](https://make.wordpress.org/hosting/
 
 Si vous choisissez un Docker base sur `debian:buster` vous devrez vous contenter de PHP 7.3, moins securise mais plus simple a mettre en place, sur `alpine`, place a la version 8.
 
-###Les bonus :
+### Les bonus :
 
 - Redis
 
