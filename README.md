@@ -531,13 +531,21 @@ Vu que c'est notre premier script, je vais vous donner un conseil qui pourrait v
 
 Notre Docker se compose de deux elements, la partie Wordpress ou l'on va telecharger Wordpress, le configurer, creer les utilisateurs, mettre a jour les plugins... et la partie qui concerne le service PHP.
 
-## Partie Wordpress:
-Il existe une maniere assez simple et optimiser de deployer notre Wordpress, grace a un outil : [wp-cli](https://wp-cli.org/fr/).
-Il va falloir commencer par telecharger l'outil, par github et avec un `wget` par exemple : ``wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar``.
+#### Partie Wordpress:
+Il existe une maniere assez simple et optimisee de deployer notre Wordpress, grace a un outil : [wp-cli](https://wp-cli.org/fr/).
+
+Il va falloir commencer par telecharger l'outil, depuis github et avec un `wget`, par exemple : ``wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar``.
+
 Voici ensuite quelques commandes qui pourraient vous etre utiles (je vous laisser trouver les arguments necessaires a leur utilisation) : `wp core download`, `wp config create`, `wp core install`, `wp user create`, `wp plugin update`.
 
+**ATTENTION : il va falloir vous assurer que le Docker Mariadb a bien fini de demarrer avant de commencer l'installation (un timer ? Essayer de se connecter a la base de donnee wordpress en boucle jusqu'a y parvenir ?) ET que l'installation n'ait pas deja ete faite par le passe (verifier si le fichier "/var/www/html/index.html" n'existe pas avant de continuer ?)!**
 
-## Partie PHP:
+
+#### Partie PHP:
+Wordpress a besoin de certaines extensions pour fonctionner, certaines sont obligatoires, d'autres optionnelles mais necessaires pour l'utilisation de certains plugins. A vous de choisir concernant les optionnelles, leur installation ralenti le deploiement de votre Docker, mais assure une meilleure compatibilite d'eventuels plugins supplementaires.
+Vous trouverez la liste des extentions [ICI](https://make.wordpress.org/hosting/handbook/server-environment/), dans la partie **PHP Extensions**.
+
+Si vous choisissez un Docker base sur `debian:buster` vous devrez vous contenter de PHP 7.3, moins securise mais plus simple a mettre en place, sur `alpine`, place a la version 8.
 
 Les bonus :
 - Redis
