@@ -529,7 +529,15 @@ Vu que c'est notre premier script, je vais vous donner un conseil qui pourrait v
 
 ### 7. <a name="wordpress"></a>Creer notre Docker Wordpress
 
-Wordpress
+Notre Docker se compose de deux elements, la partie Wordpress ou l'on va telecharger Wordpress, le configurer, creer les utilisateurs, mettre a jour les plugins... et la partie qui concerne le service PHP.
+
+## Partie Wordpress:
+Il existe une maniere assez simple et optimiser de deployer notre Wordpress, grace a un outil : [wp-cli](https://wp-cli.org/fr/).
+Il va falloir commencer par telecharger l'outil, par github et avec un `wget` par exemple : ``wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar``.
+Voici ensuite quelques commandes qui pourraient vous etre utiles (je vous laisser trouver les arguments necessaires a leur utilisation) : `wp core download`, `wp config create`, `wp core install`, `wp user create`, `wp plugin update`.
+
+
+## Partie PHP:
 
 Les bonus :
 - Redis
