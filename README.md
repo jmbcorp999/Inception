@@ -185,7 +185,7 @@ Permet d'ouvrir les ports specifies du containeur. Cette instruction est faculta
 ### <a name="dockercompose"></a>Le docker-compose
 Comme vu precedement, un container est destine a faire tourner une seule application ou un seul service, hors il est souvent necessaire pour le bon deroulement d'un projet d'en disposer de plusieurs. C'est la que rentre en jeu le docker compose.
 Docker Compose est un outil destiné à définir et exécuter des applications Docker à plusieurs conteneurs. Dans Compose, vous utilisez un fichier YAML pour configurer les services de votre application. Ensuite, vous créez et vous démarrez tous les services à partir de votre configuration en utilisant une seule commande. C'est un peu comme un Makefile qui appelerait plusieurs autres Makefile pour compiler les librairies necessaires au fonctionnement du programme.
-Pour info, YAML est un language de programmation regulierement utilise en scripting, il est tres proche du language humaim et son utilisation pour les Dockers est tres facile.
+Pour info, YAML est un language de programmation regulierement utilise en scripting, il est tres proche du language humain et son utilisation pour les Dockers est tres facile.
 
 Ce que vous allez integrer dans votre docker-compose :
 1. Le(s) reseau(x) virtuel(s) sur le(s)quel(s) va evoluer votre projet
